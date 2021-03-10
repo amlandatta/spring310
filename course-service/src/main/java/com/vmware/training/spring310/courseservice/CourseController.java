@@ -21,19 +21,15 @@ public class CourseController {
     private CourseConfig config;
 
     public CourseController() {
-        Course course1 = Course.builder()
-                .id(1)
-                .name("Spring Boot")
-                .duration(20)
-                .build();
-
-        Course course2 = Course.builder()
-                .id(2)
-                .name("Spring Cloud")
-                .duration(30)
-                .build();
+        Course course1 = Course.builder().id(1).name("Spring Boot")
+                .duration(20).build();
+        Course course2 = Course.builder().id(2).name("Spring Cloud")
+                .duration(30).build();
+        Course course3 = Course.builder().id(3).name("Kubernetes")
+                .duration(240).build();
         courseRepository.put(1, course1);
         courseRepository.put(2, course2);
+        courseRepository.put(3, course3);
     }
 
     @GetMapping

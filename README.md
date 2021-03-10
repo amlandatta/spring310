@@ -7,4 +7,6 @@ Tags
 
 0.1 : Using local configuration
 
-![course service with internal configuration](illustrations/001-course-service-internal-config.png)
+0.2 : Externalizing configurations
+
+![course service with externalized configuration](illustrations/002-course-service-external-config.png) 
