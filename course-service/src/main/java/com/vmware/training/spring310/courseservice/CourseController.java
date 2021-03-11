@@ -70,9 +70,9 @@ public class CourseController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getBook(@PathVariable("id") Integer id) {
+    public ResponseEntity<Course> getCourse(@PathVariable("id") Integer id) {
         Course course = courseRepository.get(id);
-
+        log.info("Got course {}", course.toString());
         if(course != null)
             return ResponseEntity.ok(course);
         else
@@ -80,7 +80,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteBook(@PathVariable("id") Integer id) {
+    public ResponseEntity deleteCourse(@PathVariable("id") Integer id) {
 
         if(courseRepository.containsKey(id)) {
             courseRepository.remove(id);

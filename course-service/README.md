@@ -1,6 +1,6 @@
 # course-service: 
 
-A sample SpringBoot project integrated with Spring Cloud Config Server
+A sample SpringBoot project integrated with Spring Cloud Config Server and Eureka server (a service registry)
 
 ### Pre-requisites
 
@@ -9,40 +9,13 @@ A sample SpringBoot project integrated with Spring Cloud Config Server
 
 ### What's new?
 
-Externalized configuration to git repo.
+1. Updated `pom.xml`
 
-1. Removed all properties from application.properties and moved to config-repo. Deleted application-test.properties. 
-
-```
-server.port=8181
-course-service.recommended-course-id=2
-```
-
-Note: `spring.config.import=` is required at start up to connect to config server. But this can be externalized and passed as environment variable.
-
-2. Updated `pom.xml`
-
-```
+```xml
 <dependency>
     <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-config</artifactId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 </dependency>
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-actuator</artifactId>
-</dependency>
-...
-<dependencyManagement>
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-    </dependency>
-</dependencies>
-</dependencyManagement>
 ```
 
 ### Run
@@ -53,12 +26,10 @@ Note: `spring.config.import=` is required at start up to connect to config serve
 
 `mvn spring-boot:run -DSkiptest -Dspring-boot.run.profiles=test`
 
+To test load balancing, we need to run multiple instance of the application. For this comment `spring.config.import` in `application.properties` and include different `server.port` value to run the application.
+
 ### Test
 
-`http http://localhost:8181/courses/recommend`
+`http http://localhost:8181/courses/`
 
-Should return different recommendation for each environment based upon the configured value
 
-To troubleshoot, check if the environment variables are loaded (this will require actuator to be included in the project and endpoints exposed `management.endpoints.web.exposure.include=*`)
-
-`http http://localhost:8181/actuator/env | jq '.' | grep -i "course-service.recommended-course-id" -A3`
