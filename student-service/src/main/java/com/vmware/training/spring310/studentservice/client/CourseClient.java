@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient(name="courseservices", url = "localhost:8181")
+@FeignClient(name="courseservices", url = "${course-service.baseuri}")
 @RequestMapping("/courses")
 public interface CourseClient {
 
