@@ -18,3 +18,7 @@ Tags
 0.3 : App to App communication using OpenFeign
 
 ![app to app communication using REST](illustrations/003-app2app-rest-communication.png) 
+
+0.4 : Service discovery using Eureka Server
+
+![service registry using eureka server](illustrations/004-integrated-with-service-registry.png) 
