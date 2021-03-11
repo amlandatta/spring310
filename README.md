@@ -9,4 +9,4 @@ Tags
 
 0.2 : Externalizing configurations
 
-![course service with externalized configuration](illustrations/002-course-service-external-config.png) 
+![app to app communication using REST](illustrations/003-app2app-rest-communication.png) 
