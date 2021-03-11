@@ -15,4 +15,6 @@ Tags
 
 0.3 : App to App communication using REST Template
 
+0.4 : App to App communication using OpenFeign
+
 ![app to app communication using REST](illustrations/003-app2app-rest-communication.png) 

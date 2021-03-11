@@ -1,6 +1,6 @@
 # student-service: 
 
-A sample SpringBoot project which uses REST template to communicate with other app
+A sample SpringBoot project which uses OpenFeign to communicate with other app
 
 ### Pre-requisites
 
@@ -9,7 +9,22 @@ A sample SpringBoot project which uses REST template to communicate with other a
 
 ### What's new?
 
-Refer `com.vmware.training.spring310.studentservice.StudentServiceApplication.java` and `getStudentCourses` method in `StudentController.java` for RESTTemplate implementation.
+To replace REST Template by OpenFeign implementation following were changed:
+
+1. Included dependency in `pom.xml`
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+```
+
+2. Included a `FeignClient` interface `CourseClient.java`
+
+3. Included `@EnableFeignClients` in `StudentServiceApplication.java` to autowire FeignClient
+
+4. Replace REST template by `FeignClient` in `StudentController.java`
 
 ### Run
 

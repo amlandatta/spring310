@@ -1,16 +1,14 @@
 package com.vmware.training.spring310.studentservice;
 
+import com.vmware.training.spring310.studentservice.client.CourseClient;
 import com.vmware.training.spring310.studentservice.entity.Course;
 import com.vmware.training.spring310.studentservice.entity.Student;
 import com.vmware.training.spring310.studentservice.entity.StudentCourses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -22,14 +20,14 @@ public class StudentController {
     private Map<Integer, Student> studentRepository = new HashMap<>();
     private Map<Integer, StudentCourses> studentCourseRepository = new HashMap<>();
 
-    private final RestTemplate restTemplate;
+    private final CourseClient courseClient;
 
     @Value( "${course-service.baseuri}" )
     private String COURSE_BASE_URI;
 
-    public StudentController(RestTemplate restTemplate) {
+    public StudentController(CourseClient courseClient) {
         super();
-        this.restTemplate = restTemplate;
+        this.courseClient = courseClient;
         initialize();
     }
 
@@ -124,16 +122,11 @@ public class StudentController {
 
         if (null!=courses) {
             courses.forEach(c-> {
-                ResponseEntity<Course> courseResponseEntity =
-                        this.restTemplate.exchange(COURSE_BASE_URI + "courses/" + c.getId(),
-                                HttpMethod.GET, null,
-                                new ParameterizedTypeReference<Course>() {});
-                Course course = courseResponseEntity.getBody();
+                Course course = this.courseClient.getCourse(c.getId());
                 c.setDuration(course.getDuration());
                 c.setName(course.getName());
             });
         }
-
         if(studentCourses != null)
             return ResponseEntity.ok(studentCourses);
         else
