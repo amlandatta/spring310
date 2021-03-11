@@ -1,6 +1,6 @@
 # student-service: 
 
-A sample SpringBoot project which uses OpenFeign to communicate with other app
+A sample SpringBoot project which uses OpenFeign to communicate with other app. Integrated with Config Server and Eureka server (service registry)
 
 ### Pre-requisites
 
@@ -11,20 +11,24 @@ A sample SpringBoot project which uses OpenFeign to communicate with other app
 
 To replace REST Template by OpenFeign implementation following were changed:
 
-1. Included dependency in `pom.xml`
+### What's new?
+
+1. Updated `pom.xml`
 
 ```xml
 <dependency>
     <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-openfeign</artifactId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 </dependency>
 ```
 
-2. Included a `FeignClient` interface `CourseClient.java`
+2. Removed `url` from `@FeignClient` in the interface `CourseClient.java` as course-service application will be auto discovered via Eureka server.
 
-3. Included `@EnableFeignClients` in `StudentServiceApplication.java` to autowire FeignClient
 
-4. Replace REST template by `FeignClient` in `StudentController.java`
+3. Included `eureka.client.service-url.defaultZone=http://localhost:8761/eureka/` in `application.property`. Refer config-repo
+
+
+4. Note: for load balancing Ribbon is replaced by Spring Cloud Loadbalancer and Ribbon can be disabled using  `spring.cloud.loadbalancer.ribbon.enabled=false`
 
 ### Run
 
