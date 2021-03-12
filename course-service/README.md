@@ -46,3 +46,5 @@ result:
 `docker run -p 8080:8080 ad-library/spring310-course-service:0.0.1-SNAPSHOT`
 
 Note: If Eureka and Config server is not running then expect errors but the REST endpoints will be accessible.
+
+At this stage no change required to deploy to Kubernetes
