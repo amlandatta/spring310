@@ -44,3 +44,6 @@ spec:
       containers:
       - name: course-service
         image: ad-library/spring310-course-service:0.0.1-SNAPSHOT
+        env:
+          - name: "course-service.recommended-course-id"
+            value: "2"

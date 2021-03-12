@@ -39,8 +39,20 @@ kubectl expose deployment course-service --port=8181 --target-port=8080
 kubectl port-forward service/course-service 8181:8181
 ```
 
-### Test
+### Changes
 
-`http http://localhost:8181/courses`
+Passing configuration through environment variables 
+
+```yaml
+    spec:
+      containers:
+        - name: course-service
+          image: ad-library/spring310-course-service:0.0.1-SNAPSHOT
+          env:
+            - name: "course-service.recommended-course-id"
+              value: "3"
+```
+
+### Test
 
 `http http://localhost:8181/courses/recommend`

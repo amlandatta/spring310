@@ -26,3 +26,5 @@ Tags
 1.0 : Build docker image and run Spring apps locally as docker container
 
 1.1 : Deploying Spring apps to Kubernetes
+
+1.2 : Passing configuration to SpringBoot app via environment variables 
