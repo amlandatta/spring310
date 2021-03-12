@@ -1,57 +1,47 @@
 # service-registry
 
-Run a local instance of Eureka server i.e a Service Registry
+Run a local docker instance of Eureka server i.e a Service Registry
 
 ### Pre-requisites
 
 * Java 11
 * Maven
+* Docker
+* Docker compose
 
-### Key code snippets and configurations
+### What's new?
 
-1. Refer `pom.xml`
+Change to create docker image
 
-```xml
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-</dependency>
-```
-
-2. Add `@EnableEurekaServer` to `public class ServiceRegistryApplication`
-
-3.  Refer `application.properties`
-
-```
-spring.application.name=service-registry
-server.port=8761
-
-eureka.client.register-with-eureka=false
-eureka.client.fetch-registry=false
-```
-
-4. After starting the eureka server, update `pom.xml` for all Spring-boot microservices
+1. Updated `pom.xml`
 
 ```xml
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-</dependency>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <image>
+                    <name>ad-library/spring310-${project.artifactId}:${project.version}</name>
+                </image>
+                <pullPolicy>IF_NOT_PRESENT</pullPolicy>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+### Build image
+
+`mvn spring-boot:build-image -DskipTests`
+
+result:
+```
+[INFO] Successfully built image 'docker.io/ad-library/spring310-service-registry:0.0.1-SNAPSHOT'
 ```
 
 ### Run
 
-`mvn spring-boot:run -DSkiptest`
-
-### Test
-
-Launch from browser the Eureka dashboard http://localhost:8761/
-
-* Apps registered with Eureka server
-![Apps registered with Eureka server](../illustrations/004-apps-register-with-registry.png) 
-
-
-* Multiple instances of same app registered with Eureka server
-![Multiple instances of same app registered with Eureka server](../illustrations/004-two-instance-of-app-registered.png)
-
+`docker run -p 8761:8761 ad-library/spring310-service-registry:0.0.1-SNAPSHOT`
 

@@ -6,40 +6,43 @@ A sample SpringBoot project which uses OpenFeign to communicate with other app. 
 
 * Java 11
 * Maven
+* Docker
+* Docker compose
 
 ### What's new?
 
-To replace REST Template by OpenFeign implementation following were changed:
-
-### What's new?
+Change to create docker image
 
 1. Updated `pom.xml`
 
 ```xml
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-</dependency>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <image>
+                    <name>ad-library/spring310-${project.artifactId}:${project.version}</name>
+                </image>
+                <pullPolicy>IF_NOT_PRESENT</pullPolicy>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 ```
 
-2. Removed `url` from `@FeignClient` in the interface `CourseClient.java` as course-service application will be auto discovered via Eureka server.
+### Build image
 
+`mvn spring-boot:build-image -DskipTests`
 
-3. Included `eureka.client.service-url.defaultZone=http://localhost:8761/eureka/` in `application.property`. Refer config-repo
-
-
-4. Note: for load balancing Ribbon is replaced by Spring Cloud Loadbalancer and Ribbon can be disabled using  `spring.cloud.loadbalancer.ribbon.enabled=false`
+result:
+```
+[INFO] Successfully built image 'docker.io/ad-library/spring310-student-service:0.0.1-SNAPSHOT'
+```
 
 ### Run
 
-`mvn spring-boot:run -DSkiptest`
+`docker run -p 8080:8080 ad-library/spring310-student-service:0.0.1-SNAPSHOT`
 
-- Run with test profile
-
-`mvn spring-boot:run -DSkiptest -Dspring-boot.run.profiles=test`
-
-### Test
-
-`http http://localhost:8182/students`
-
-`http http://localhost:8182/students/1/courses`
+Note: If Eureka and Config server is not running then expect errors but the REST endpoints will be accessible.

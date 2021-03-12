@@ -1,95 +1,50 @@
 # config-server
 
-Run a local instance of Spring config server project linked with local git repo.
+Run a local docker instance of Spring config server project linked with local git repo.
 
 ### Pre-requisites
 
-* Create a local git repo for configurations
-  
-```
-mkdir -p ~/workspace/config-repo
-cd ~/workspace/config-repo
-cat > course-service.properties
-course-service.recommended-course-id=2
-git add .
-git commit -m "Initial commit"
-git branch -M main
-```
+* Java 11
+* Maven
+* Docker
+* Docker compose
 
-Refer [config-repo from Github](https://github.com/amlandatta/config-repo.git)
+### What's new?
 
-### Key code snippets and configurations
+Change to create docker image
 
-1. Refer `pom.xml`
+1. Updated `pom.xml`
 
-```
-<properties>
-    <java.version>11</java.version>
-    <spring-cloud.version>2020.0.1</spring-cloud.version>
-</properties>
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-config-server</artifactId>
-    </dependency>
-</dependencies>
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <version>${spring-cloud.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <image>
+                    <name>ad-library/spring310-${project.artifactId}:${project.version}</name>
+                </image>
+                <pullPolicy>IF_NOT_PRESENT</pullPolicy>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 ```
 
-2. Add `@EnableConfigServer` to `public class ConfigServerApplication`
+2. Changed git url from local file to github 
 
+`spring.cloud.config.server.git.uri=https://github.com/amlandatta/config-repo.git`
 
-3.  Refer `application.properties`
+### Build image
 
+`mvn spring-boot:build-image -DskipTests`
+
+result:
 ```
-spring.application.name=config-server
-server.port=9191
-
-spring.cloud.config.server.git.uri=file://${HOME}/workspace/config-repo
-
-#Spring config server will load properties from a master by default
-spring.cloud.config.server.git.default-label=trunk
-spring.cloud.config.server.git.force-pull=true
+[INFO] Successfully built image 'docker.io/ad-library/spring310-config-server:0.0.1-SNAPSHOT'
 ```
 
 ### Run
 
-`mvn spring-boot:run -DSkiptest`
-
-### Test
-
-`http http://localhost:9191/config-server/env | jq '.'`
-
-`http http://localhost:9191/course-service/default | jq '.'`
-
-This should return:
-
-```json
-{
-  "name": "course-service",
-  "profiles": [
-    "default"
-  ],
-  "label": null,
-  "version": "...",
-  "state": null,
-  "propertySources": [
-    {
-      "name": "file:///../workspace/config-repo/course-service.properties",
-      "source": {
-        "course-service.recommended-course-id": "2"
-      }
-    }
-  ]
-}
-```
+`docker run -p 8761:8761 ad-library/spring310-config-server:0.0.1-SNAPSHOT`

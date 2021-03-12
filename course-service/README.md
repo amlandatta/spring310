@@ -6,30 +6,43 @@ A sample SpringBoot project integrated with Spring Cloud Config Server and Eurek
 
 * Java 11
 * Maven
+* Docker
+* Docker compose
 
 ### What's new?
+
+Change to create docker image
 
 1. Updated `pom.xml`
 
 ```xml
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-</dependency>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <image>
+                    <name>ad-library/spring310-${project.artifactId}:${project.version}</name>
+                </image>
+                <pullPolicy>IF_NOT_PRESENT</pullPolicy>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+### Build image
+
+`mvn spring-boot:build-image -DskipTests`
+
+result:
+```
+[INFO] Successfully built image 'docker.io/ad-library/spring310-course-service:0.0.1-SNAPSHOT'
 ```
 
 ### Run
 
-`mvn spring-boot:run -DSkiptest`
+`docker run -p 8080:8080 ad-library/spring310-course-service:0.0.1-SNAPSHOT`
 
-- Run with test profile
-
-`mvn spring-boot:run -DSkiptest -Dspring-boot.run.profiles=test`
-
-To test load balancing, we need to run multiple instance of the application. For this comment `spring.config.import` in `application.properties` and include different `server.port` value to run the application.
-
-### Test
-
-`http http://localhost:8181/courses/`
-
-
+Note: If Eureka and Config server is not running then expect errors but the REST endpoints will be accessible.

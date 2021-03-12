@@ -22,3 +22,5 @@ Tags
 0.4 : Service discovery using Eureka Server
 
 ![service registry using eureka server](illustrations/004-integrated-with-service-registry.png) 
+
+1.0 : Build docker image and run Spring apps locally as docker container
