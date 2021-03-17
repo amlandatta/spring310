@@ -1,11 +1,12 @@
 # Spring on Kubernetes
 
-Run a local docker instance of Spring config server project linked with local git repo.
+Deploy SpringBoot application to Kubernetes. Load configuration using ConfigMap
 
 ### Pre-requisites
 
 * kind
 * Docker
+* kubectl
 
 ### Get a local Kubernetes cluster
 
@@ -30,7 +31,16 @@ kind load docker-image ad-library/spring310-course-service:0.0.1-SNAPSHOT --name
 ### Deploy to Kubernetes
 
 ```shell
-kubectl create deployment course-service --image=test
+kubectl create configmap spring-with-k8s-config \
+    --from-file=${HOME}/workspace/config-repo/course-service.properties \
+    --from-file=${HOME}/workspace/config-repo/student-service.properties \
+    -n spring-world-ns
+
+kubectl create deployment course-service --image=ad-library/spring310-course-service:0.0.1-SNAPSHOT
+
+# this will deploy app but will not load the configurations
+# to load configurations refer course-service-deployment.yaml
+
 kubectl expose deployment course-service --port=8181 --target-port=8080
 
 #./course-service-build-to-deploy.sh
@@ -40,7 +50,5 @@ kubectl port-forward service/course-service 8181:8181
 ```
 
 ### Test
-
-`http http://localhost:8181/courses`
 
 `http http://localhost:8181/courses/recommend`

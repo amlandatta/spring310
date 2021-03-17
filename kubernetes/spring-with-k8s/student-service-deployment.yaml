@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: spring-world-ns
+  name: spring-world
 
 ---
 apiVersion: v1
@@ -11,12 +11,12 @@ metadata:
   labels:
     app: course-service
   name: course-service
-  namespace: spring-world-ns
+  namespace: spring-world
 spec:
   ports:
     - port: 8181
       protocol: TCP
-      targetPort: 8181
+      targetPort: 8080
   selector:
     app: course-service
   type: ClusterIP
@@ -29,7 +29,7 @@ metadata:
   labels:
     app: course-service
   name: course-service
-  namespace: spring-world-ns
+  namespace: spring-world
 spec:
   replicas: 1
   selector:
@@ -44,7 +44,10 @@ spec:
       volumes:
         - name: application-config
           configMap:
-            name: spring-with-k8s-config
+            name: course-config
+            items:
+              - key: course-service.properties
+                path: course-service.properties
       containers:
       - name: course-service
         image: ad-library/spring310-course-service:0.0.1-SNAPSHOT

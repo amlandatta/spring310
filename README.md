@@ -1,6 +1,6 @@
 # Spring 310: Spring for Microservice and Kubernetes
 
-Tags
+Contents
 -----
 
 0.0 : Getting started with Project Setup
@@ -23,6 +23,14 @@ Tags
 
 ![service registry using eureka server](illustrations/004-integrated-with-service-registry.png) 
 
+---
+
+## Docker and Kubernetes
+
 1.0 : Build docker image and run Spring apps locally as docker container
 
+![dockerize springboot app](illustrations/005-dockerized-springboot-app.png)
+
 1.1 : Deploying Spring apps to Kubernetes
+
+![deploy springboot app to kubernetes](illustrations/006-deploy-springboot-to-k8s.png)

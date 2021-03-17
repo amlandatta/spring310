@@ -11,40 +11,12 @@ A sample SpringBoot project integrated with Spring Cloud Config Server and Eurek
 
 ### What's new?
 
-Change to create docker image
+Change to deploy to Kubernetes
 
-1. Updated `pom.xml`
+1. change `application.properties` to load configuration from volume mount within the pod.
 
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <configuration>
-                <image>
-                    <name>ad-library/spring310-${project.artifactId}:${project.version}</name>
-                </image>
-                <pullPolicy>IF_NOT_PRESENT</pullPolicy>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
+```
+spring.config.import=optional:file:/deployments/config/course-service.properties
 ```
 
-### Build image
-
-`mvn spring-boot:build-image -DskipTests`
-
-result:
-```
-[INFO] Successfully built image 'docker.io/ad-library/spring310-course-service:0.0.1-SNAPSHOT'
-```
-
-### Run
-
-`docker run -p 8080:8080 ad-library/spring310-course-service:0.0.1-SNAPSHOT`
-
-Note: If Eureka and Config server is not running then expect errors but the REST endpoints will be accessible.
-
-At this stage no change required to deploy to Kubernetes
+Note: SpringBoot 2.4.x enables this new property `spring.config.import`
