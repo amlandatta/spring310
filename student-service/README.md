@@ -1,6 +1,6 @@
 # student-service: 
 
-A sample SpringBoot project which uses OpenFeign to communicate with other app. Integrated with Config Server and Eureka server (service registry)
+A sample SpringBoot, Kubernetes deployable project which uses OpenFeign to communicate with course-service application
 
 ### Pre-requisites
 
@@ -8,41 +8,23 @@ A sample SpringBoot project which uses OpenFeign to communicate with other app. 
 * Maven
 * Docker
 * Docker compose
+* Kind
+* kubectl
+
 
 ### What's new?
 
-Change to create docker image
+Change to deploy to Kubernetes
 
-1. Updated `pom.xml`
+1. Removed Spring Cloud Config dependency but retained Spring Cloud dependencies as OpenFeign 
+   
+2. Included path for configuration in `application.properties` as `spring.config.import=optional:file:/deployments/config/student-service.properties`
 
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <configuration>
-                <image>
-                    <name>ad-library/spring310-${project.artifactId}:${project.version}</name>
-                </image>
-                <pullPolicy>IF_NOT_PRESENT</pullPolicy>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
+3. Course service endpoint (hostname and port) injected from environment variable which is updated by Kubernetes by default. Refer `CourseClient.java` 
+
+```java
+@FeignClient(name="course-service",
+        url = "${COURSE_SERVICE_SERVICE_HOST:http://localhost}:${COURSE_SERVICE_SERVICE_PORT:8181}")
+@RequestMapping("/courses")
+public interface CourseClient {
 ```
-
-### Build image
-
-`mvn spring-boot:build-image -DskipTests`
-
-result:
-```
-[INFO] Successfully built image 'docker.io/ad-library/spring310-student-service:0.0.1-SNAPSHOT'
-```
-
-### Run
-
-`docker run -p 8080:8080 ad-library/spring310-student-service:0.0.1-SNAPSHOT`
-
-Note: If Eureka and Config server is not running then expect errors but the REST endpoints will be accessible.

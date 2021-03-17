@@ -1,6 +1,6 @@
 # Spring 310: Spring for Microservice and Kubernetes
 
-Contents
+Follow the branches
 -----
 
 0.0 : Getting started with Project Setup
@@ -31,6 +31,10 @@ Contents
 
 ![dockerize springboot app](illustrations/005-dockerized-springboot-app.png)
 
-1.1 : Deploying Spring apps to Kubernetes
+1.1 : Deploying SpringBoot apps to Kubernetes
 
 ![deploy springboot app to kubernetes](illustrations/006-deploy-springboot-to-k8s.png)
+
+1.2 : Service discovery of SpringBoot apps in Kubernetes
+
+![deploy springboot app to kubernetes](illustrations/007-k8s-with-service-discovery.png)
