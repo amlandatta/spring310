@@ -41,7 +41,7 @@ kubectl create deployment course-service --image=ad-library/spring310-course-ser
 # this will deploy app but will not load the configurations
 # to load configurations refer course-service-deployment.yaml
 
-kubectl expose deployment course-service --port=8181 --target-port=8080
+kubectl expose deployment course-service --port=8181 --target-port=8181
 
 #./course-service-build-to-deploy.sh
 
@@ -49,6 +49,18 @@ kubectl expose deployment course-service --port=8181 --target-port=8080
 kubectl port-forward service/course-service 8181:8181
 ```
 
+Similarly, build and deploy student services
+
+```shell
+./student-service-build-to-deploy.sh
+
+kubectl expose deployment course-service --port=8182 --target-port=8182
+```
+
 ### Test
 
 `http http://localhost:8181/courses/recommend`
+
+To test app to app communication using Kubernetes services:
+
+`http http://localhost:8182/students/1/courses`

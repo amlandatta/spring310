@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: spring-world
+  name: spring-world-ns
 
 ---
 apiVersion: v1
@@ -11,12 +11,12 @@ metadata:
   labels:
     app: student-service
   name: student-service
-  namespace: spring-world
+  namespace: spring-world-ns
 spec:
   ports:
-    - port: 8181
+    - port: 8182
       protocol: TCP
-      targetPort: 8080
+      targetPort: 8182
   selector:
     app: student-service
   type: ClusterIP
@@ -29,7 +29,7 @@ metadata:
   labels:
     app: student-service
   name: student-service
-  namespace: spring-world
+  namespace: spring-world-ns
 spec:
   replicas: 1
   selector:
@@ -45,12 +45,9 @@ spec:
         - name: application-config
           configMap:
             name: spring-with-k8s-config
-            items:
-              - key: student-service.properties
-                path: student-service.properties
       containers:
       - name: student-service
-        image: ad-library/spring310-course-service:0.0.1-SNAPSHOT
+        image: ad-library/spring310-student-service:0.0.1-SNAPSHOT
         volumeMounts:
           - name: application-config
             mountPath: "/deployments/config"
