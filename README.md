@@ -3,7 +3,7 @@
 Follow the branches
 -----
 
-0.0 : [Getting started with Project Setup](//tree/0.0-get-started)
+0.0 : [Getting started with Project Setup](/tree/0.0-get-started)
 
 0.1 : Using local configuration
 
